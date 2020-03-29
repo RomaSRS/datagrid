@@ -36,6 +36,7 @@ const getDisplayData = (state) => {
 		const matched = findMatches(result, shirtSizeFilter, 'shirtSize')
 		result = matched
 	}
+
 	return result
 }
 

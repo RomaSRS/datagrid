@@ -1,22 +1,45 @@
-import { createStore } from 'redux'
-import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction'
-import { saveState } from '../utils/local-storage'
-import reducer from '../reducers/reducer'
+import _ from 'lodash'
 
-const store = createStore(reducer, devToolsEnhancer())
+const sortItems = (data, fields, directions) => {
+	const orderedData = _.orderBy(data, fields, directions)
+	return orderedData
+}
 
-store.subscribe(() => {
-	const currentState = store.getState()
-	const dataToSave = [{
-		key: 'filters',
-		data: currentState.filters
-	},
-	{
-		key: 'columns',
-		data: currentState.columns
-	}]
-	saveState(dataToSave)
-});
+const findMatches = (data, value, type) => {
+	let resultData = null
+	switch (type) {
+		case 'search':
+			resultData = data.filter(el => {
+				const values = Object.values(el)
+				const index = values.findIndex(item => {
+					if (typeof item === 'string') {
+						return item.toLowerCase().includes(value.toLowerCase())
+					}
+					return false
+				})
+				if (index >= 0) {
+					return el
+				}
+				return false
+			})
+			break
+		case 'isMarried':
+			resultData = data.filter(el => {
+				return el[type]
+			})
+			break
+		case 'shirtSize':
+			resultData = data.filter(el => {
+				return value.includes(el[type])
+			})
+			break
+		default:
+	}
 
+	return resultData
+}
 
-export default store
+export {
+	sortItems,
+	findMatches,
+}

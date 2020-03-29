@@ -13,6 +13,7 @@
 
  body, body a {
    color: #110e0e;
+   overflow-y:hidden;
  }
 
  .css-1ur38-control {
